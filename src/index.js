@@ -1,4 +1,3 @@
-import { timingSafeEqual } from "crypto";
 import MailValidator from './lib/MailValidator';
 import PasswordValidator from './lib/PasswordValidator';
 
