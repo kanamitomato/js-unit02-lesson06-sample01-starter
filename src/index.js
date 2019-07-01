@@ -1,5 +1,6 @@
 import MailValidator from './lib/MailValidator';
 import PasswordValidator from './lib/PasswordValidator';
+import BaseValidator from './lib/BaseValidator';
 
 const validate = (email, password) => {
     const mailValidator = new MailValidator(email);
@@ -17,6 +18,46 @@ const addErrorMessage = (type, message) => {
     input.insertAdjacentHTML('afterend', `<div class="invalid-feedback">${message}</div>`);//input要素の後にエラーメッセージを表示する。
 }
 
+
+const removeErrors = () => {
+    return new Promise((resolve) => {
+        document.querySelectorAll('.is-invalid').forEach((el) => {
+            el.classList.remove('.is-invalid');
+        })
+        document.querySelectorAll('.invalid-feedback').forEach((el) => {
+            el.parentNode.removeChild(el);
+        })
+        resolve();
+    })
+}
+
+import fetch from 'whatwg-fetch';
+const endpoint = 'http://localhost:3000';
+
+const login = (email, password) => {
+    return new Promise((resolve, reject) => {
+        fetch(`${endpoint}/login`, {
+            method: 'post',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        })
+        .then((res) => {
+            const json = res.json();
+            if(res.status === 200) {
+                return json
+            } else {
+                return Promise.reject(new Error('ログイン失敗'))
+            }
+        })
+    })
+}
+
 const onSubmit = async () => {
     await removeErrors()
     let emailInput = document.getElementById('email');
@@ -25,30 +66,28 @@ const onSubmit = async () => {
     let passwordVal = passwordInput.value;
     const results = await validate(emailVal, passwordVal);
     if(results[0].success && results[1].success) {
+        login(emailVal, passwordVal)
+        .then((json) => {
+            alert(json.message);
+        })
+        .catch((err) => {
+            alert(err.message);
+        })
         //バリデーション成功
     } else if(results[0].success){
         //パスワードのバリデーションに失敗
         addErrorMessage("password", results[1].message)
     } else if(results[1].success) {
         //メールアドレスのバリデーションに失敗
-        addErrorMessage("email", res[0].message);
+        addErrorMessage("email", results[0].message);
     } else { 
         //メールアドレス、パスワードともにバリデーション失敗
-        addErrorMessage("email", res[0].message);
-        addErrorMessage("password", res[1].message);
+        addErrorMessage("password", results[1].message);
+        addErrorMessage("email", results[0].message);
     }
 }
 
 {
     const submit = document.getElementById('submit');//送信ボタンの要素を取得
     submit.addEventListener('click', onSubmit);//送信ボタンがクリックされるとonsubmitを呼び出す
-}
-
-const removeErrors = () => {
-    return new Promise((resolve) => {
-        document.querySelectorAll('.is-invalid').forEach((el) => {
-            el.parentNode.removeChild(el);
-        })
-        resolve();
-    })
 }

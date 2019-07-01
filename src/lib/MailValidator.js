@@ -1,12 +1,12 @@
 import BaseValidator from './BaseValidator';
 
-class MailValidator extends BaseValidator {
+export default class extends BaseValidator {
     constructor(val) {
-        super(val, "メールアドレス");//superクラスのコンストラクタを呼び出す
+        super(val, 'メールアドレス');//superクラスのコンストラクタを呼び出す
         this._checkFormat = this._checkFormat.bind(this);
     }
     validate() {
-        return super.cannotEmpty()
+        return super._cannotEmpty()
         .then(this._checkFormat)
         .then((res) => {
             return { success: true };
