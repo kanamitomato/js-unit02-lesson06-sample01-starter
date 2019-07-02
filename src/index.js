@@ -1,6 +1,7 @@
 import MailValidator from './lib/MailValidator';
 import PasswordValidator from './lib/PasswordValidator';
-import BaseValidator from './lib/BaseValidator';
+import 'whatwg-fetch';
+const endpoint = 'http://localhost:3000';
 
 const validate = (email, password) => {
     const mailValidator = new MailValidator(email);
@@ -13,7 +14,6 @@ const validate = (email, password) => {
 
 const addErrorMessage = (type, message) => {
     let input = document.getElementById(type);//メールアドレスなら"email"、パスワードなら"password"がタイプに入る
-    let val = input.val;
     input.classList.add('is-invalid');
     input.insertAdjacentHTML('afterend', `<div class="invalid-feedback">${message}</div>`);//input要素の後にエラーメッセージを表示する。
 }
@@ -31,30 +31,25 @@ const removeErrors = () => {
     })
 }
 
-import fetch from 'whatwg-fetch';
-const endpoint = 'http://localhost:3000';
-
 const login = (email, password) => {
-    return new Promise((resolve, reject) => {
-        fetch(`${endpoint}/login`, {
-            method: 'post',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password
-            })
+    fetch(`${endpoint}/login`, {
+        method: 'post',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            email: email,
+            password: password
         })
-        .then((res) => {
-            const json = res.json();
-            if(res.status === 200) {
-                return json
-            } else {
-                return Promise.reject(new Error('ログイン失敗'))
-            }
-        })
+    })
+    .then((res) => {
+        const json = res.json();
+        if(res.status === 200) {
+            return json
+        } else {
+            return Promise.reject(new Error('ログイン失敗'))
+        }
     })
 }
 
