@@ -32,7 +32,7 @@ const removeErrors = () => {
 }
 
 const login = (email, password) => {
-    fetch(`${endpoint}/login`, {
+    return fetch(`${endpoint}/login`, {
         method: 'post',
         headers: {
             Accept: 'application/json',
