@@ -4,11 +4,12 @@ class BaseValidator {
     constructor(type, val){
         this.type = type;
         this.val = val;
+        this.result = {};
     }
     _cannotEmpty(){
         return new Promise((resolve, reject) => {
             if(!!this.val){
-                resolve()
+                resolve(this)
             } else {
                 reject({
                     success: false,
