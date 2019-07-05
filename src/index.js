@@ -12,13 +12,6 @@ const validate = (email, password) => {
     ]);
 }
 
-const addErrorMessage = (type, message) => {
-    let input = document.getElementById(type);//メールアドレスなら"email"、パスワードなら"password"がタイプに入る
-    input.classList.add('is-invalid');
-    input.insertAdjacentHTML('afterend', `<div class="invalid-feedback">${message}</div>`);//input要素の後にエラーメッセージを表示する。
-}
-
-
 const removeErrors = () => {
     return new Promise((resolve) => {
         document.querySelectorAll('.is-invalid').forEach((el) => {
@@ -29,6 +22,12 @@ const removeErrors = () => {
         })
         resolve();
     })
+}
+
+const addErrorMessage = (type, message) => {
+    let input = document.getElementById(type);
+    input.classList.add('is-invalid');
+    input.insertAdjacentHTML('afterend', `<div class="invalid-feedback">${message}</div>`);
 }
 
 const login = (email, password) => {
@@ -56,8 +55,8 @@ const login = (email, password) => {
 const onSubmit = async () => {
     await removeErrors()
     let emailInput = document.getElementById('email');
-    let passwordInput = document.getElementById('password');//input要素を取得
-    let emailVal = emailInput.value;//input要素に入力された値を得るために要素のvalueプロパティにアクセスする
+    let passwordInput = document.getElementById('password');
+    let emailVal = emailInput.value;
     let passwordVal = passwordInput.value;
     const results = await validate(emailVal, passwordVal);
     if(results[0].success && results[1].success) {
@@ -68,15 +67,11 @@ const onSubmit = async () => {
         .catch((err) => {
             alert(err.message);
         })
-        //バリデーション成功
     } else if(results[0].success){
-        //パスワードのバリデーションに失敗
         addErrorMessage("password", results[1].message)
     } else if(results[1].success) {
-        //メールアドレスのバリデーションに失敗
         addErrorMessage("email", results[0].message);
     } else { 
-        //メールアドレス、パスワードともにバリデーション失敗
         addErrorMessage("password", results[1].message);
         addErrorMessage("email", results[0].message);
     }
