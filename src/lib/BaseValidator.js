@@ -1,6 +1,6 @@
 //中身が空でないかどうかを確認するクラスを作成する
 //空かどうか確認するには!!を使う
-class BaseValidator {
+export default class {
     constructor(type, val){
         this.type = type;
         this.val = val;
@@ -19,5 +19,3 @@ class BaseValidator {
         })
     }
 }
-
-export default BaseValidator
