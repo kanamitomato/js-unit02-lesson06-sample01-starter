@@ -29,10 +29,10 @@
     "babel-jest": "^22.4.1",
     "babel-preset-env": "^1.6.1",
     "concurrently": "^3.6.0",
-    "jest": "^22.4.2",
-    "webpack": "4.34.0",
-    "webpack-dev-middleware": "^2.0.4",
+    "jest": "^24.8.0",
+    "webpack": "^4.35.2",
+    "webpack-dev-middleware": "^3.7.0",
     "webpack-dev-server": "^3.7.2",
-    "webpack-hot-middleware": "^2.21.0"
+    "webpack-hot-middleware": "^2.25.0"
   }
 }
