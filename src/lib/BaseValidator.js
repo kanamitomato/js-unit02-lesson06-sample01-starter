@@ -1,10 +1,7 @@
-//中身が空でないかどうかを確認するクラスを作成する
-//空かどうか確認するには!!を使う
 export default class {
-    constructor(type, val){
-        this.type = type;
+    constructor(val, type){
         this.val = val;
-        this.result = {};
+        this.type = type;
     }
     _cannotEmpty(){
         return new Promise((resolve, reject) => {
